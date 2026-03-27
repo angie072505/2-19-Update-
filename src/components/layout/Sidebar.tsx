@@ -67,7 +67,7 @@ export function Sidebar({ activePage = 'welcome' }: SidebarProps) {
             <Instagram size={16} />
           </a>
           <a 
-            href="https://linkedin.com" 
+            href="https://www.linkedin.com/in/bryan-gonzalez-b06459328/"
             target="_blank" 
             rel="noopener noreferrer"
             className="text-brand-text-muted hover:text-white transition-colors duration-200"

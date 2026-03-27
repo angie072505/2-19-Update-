@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Sidebar } from './components/layout/Sidebar';
 import { 
   Instagram, 
@@ -16,6 +16,39 @@ import {
 function App() {
   const [activeSection, setActiveSection] = useState('welcome');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const contactFormRef = useRef<HTMLFormElement>(null);
+
+  const handleContactSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = contactFormRef.current;
+    if (!form) return;
+
+    const formData = new FormData(form);
+    const name = formData.get('name') as string || '';
+    const email = formData.get('email') as string || '';
+    const phone = formData.get('phone') as string || '';
+    const location = formData.get('location') as string || '';
+    const packages = formData.getAll('packages').join(', ');
+    const addons = formData.getAll('addons').join(', ');
+    const referral = formData.get('referral') as string || '';
+    const message = formData.get('message') as string || '';
+
+    const subject = `Booking Inquiry from ${name}`;
+    const body = [
+      `Name: ${name}`,
+      `Email: ${email}`,
+      `Phone: ${phone}`,
+      `Location: ${location}`,
+      `Packages Interested In: ${packages}`,
+      `Rush Edit Add-on: ${addons}`,
+      `How They Heard About You: ${referral}`,
+      ``,
+      `Message:`,
+      message,
+    ].join('\n');
+
+    window.location.href = `mailto:${contactContent.form.emailTo}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  };
 
   // Track active section on scroll
   useEffect(() => {
@@ -418,11 +451,7 @@ function App() {
 
           {/* Contact Form */}
           <div className="py-16 px-6 max-w-2xl mx-auto">
-            <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" className="space-y-6">
-              <input type="hidden" name="form-name" value="contact" />
-              <p className="hidden">
-                <label>Don't fill this out if you're human: <input name="bot-field" /></label>
-              </p>
+            <form ref={contactFormRef} onSubmit={handleContactSubmit} className="space-y-6">
               <div>
                 <label className="block text-xs font-semibold uppercase tracking-wide text-white mb-2">
                   {contactContent.form.fields.name.label} *
@@ -602,7 +631,7 @@ function App() {
                 <Instagram size={20} />
               </a>
               <a 
-                href="https://linkedin.com" 
+                href="https://www.linkedin.com/in/bryan-gonzalez-b06459328/"
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-brand-text-muted hover:text-white transition-colors"
